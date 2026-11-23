@@ -65,6 +65,23 @@ fi
 export HF_HOME="${HF_HOME_OVERRIDE:-$DATA_DIR/hf}"
 chown -R 1000:1000 "$DATA_DIR/local" "$DATA_DIR/hf" 2>/dev/null || true
 
+# --- Wait for the databases. Railway starts every service at once, and PipesHub's
+# connector service exits if Neo4j isn't accepting connections yet (at most DEPS_WAIT_SECONDS).
+host_of() { local h="${1#*://}"; h="${h#*@}"; h="${h%%/*}"; h="${h%%\?*}"; echo "${h%:*}"; }
+port_of() { local h="${1#*://}"; h="${h#*@}"; h="${h%%/*}"; h="${h%%\?*}"; case "$h" in *:*) echo "${h##*:}" ;; *) echo "$2" ;; esac; }
+deps=("$(host_of "$MONGO_URI") $(port_of "$MONGO_URI" 27017) MongoDB"
+      "$REDIS_HOST $REDIS_PORT Redis"
+      "$QDRANT_HOST $QDRANT_PORT Qdrant"
+      "$(host_of "$NEO4J_URI") $(port_of "$NEO4J_URI" 7687) Neo4j")
+deps_deadline=$((SECONDS + ${DEPS_WAIT_SECONDS:-150}))
+for d in "${deps[@]}"; do
+  read -r h p name <<< "$d"
+  until timeout 3 bash -c ">/dev/tcp/$h/$p" 2>/dev/null; do
+    if [ "$SECONDS" -ge "$deps_deadline" ]; then log "$name ($h:$p) still not reachable; starting anyway"; break; fi
+    log "waiting for $name ($h:$p)"; sleep 5
+  done
+done
+
 # --- Start PipesHub on the internal port. The admin password never reaches it.
 child=""; proxy=""
 stop() {
