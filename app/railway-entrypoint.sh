@@ -131,7 +131,7 @@ unset PIPESHUB_ADMIN_PASSWORD body
 # Wait until the query and connector services report healthy (at most READY_WAIT_SECONDS,
 # so Railway's health check window is never used up), then open the public port.
 log "waiting for the PipesHub services to report healthy"
-ready_deadline=$((SECONDS + ${READY_WAIT_SECONDS:-180}))
+ready_deadline=$((SECONDS + ${READY_WAIT_SECONDS:-120}))
 while [ "$SECONDS" -lt "$ready_deadline" ]; do
   alive || die_with_child
   st="$(api /api/v1/health/services 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin).get("status",""))' 2>/dev/null || true)"
