@@ -9,7 +9,7 @@ A Railway template for [PipesHub](https://github.com/pipeshub-ai/pipeshub-ai), t
 | Service | Folder | Image (pinned by digest) | Volume |
 |---|---|---|---|
 | PipesHub (public) | `app/` | `pipeshubai/pipeshub-ai:1.3.0-slim` | `/data/pipeshub` (uploads, model cache) |
-| MongoDB | `mongodb/` | `mongo:8.0.38` | `/data/db` |
+| MongoDB | `mongodb/` | `mongo:7.0.48` | `/data/db` |
 | Redis | `redis/` | `redis:7.4.12-bookworm` | `/data` |
 | Qdrant | `qdrant/` | `qdrant/qdrant:v1.20.2` | `/qdrant/storage` |
 | Neo4j | `neo4j/` | `neo4j:5.26.33` (Community, APOC) | `/data` |
