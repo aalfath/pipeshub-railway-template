@@ -2,6 +2,10 @@
 
 Deployers: read the entry for a version before you apply its update. Breaking changes come first.
 
+## 1.3.0-1 (2026-11-23)
+
+No change to the services: adds the Deploy on Railway button to the README, linking to the published template `pipeshub-1`.
+
 ## 1.3.0 (2026-11-23)
 
 First release of this template.

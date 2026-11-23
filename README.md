@@ -1,3 +1,5 @@
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/pipeshub-1?utm_medium=integration&utm_source=button&utm_campaign=pipeshub)
+
 # PipesHub on Railway
 
 A Railway template for [PipesHub](https://github.com/pipeshub-ai/pipeshub-ai), the open-source context layer for AI agents and enterprise search (permission-aware search and cited answers across Slack, Google Drive, Jira, Confluence and 30+ other sources).
@@ -31,7 +33,8 @@ After you sign in, add an AI model (OpenAI, Anthropic, Gemini, Ollama, and other
 ## Limits
 
 - The coding sandbox (`run_code` in agents) needs the Docker socket, which Railway doesn't give. It stays off; the rest of the product works.
-- PipesHub is memory hungry: upstream recommends 4 vCPU and 16 GB RAM for the app. It boots in about 3 GB; indexing large sources needs more.
+- PipesHub is memory hungry: on Railway the app used about 5 GB of RAM once started (it also ran with an 8 GB limit). Indexing large sources needs more; upstream recommends 4 vCPU and 16 GB.
+- Upstream's anonymous usage telemetry is on by default. Set `TELEMETRY_COLLECTION_FLAG=false` on the PipesHub service to turn it off.
 
 ## Updates
 
